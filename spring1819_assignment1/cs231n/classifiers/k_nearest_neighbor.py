@@ -77,7 +77,8 @@ class KNearestNeighbor(object):
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-                dists[i,j] = np.linalg.norm(self.X_train[j,] - X[i,])
+                dists[i, j] = np.sqrt(np.sum((X[i, :] - self.X_train[j, :]) ** 2))
+                # dists[i,j] = np.linalg.norm(self.X_train[j,] - X[i,])
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -101,7 +102,8 @@ class KNearestNeighbor(object):
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            dists[i, :] = np.sqrt(np.sum((X[i, :] - self.X_train) ** 2, axis=1))
+            # dists[i, :] = np.linalg.norm(X[i] - self.X_train, axis=1)
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -131,8 +133,17 @@ class KNearestNeighbor(object):
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # dists[i, :] = np.sqrt(np.sum((X[i, :] - self.X_train) ** 2, axis=1))
+        # dists[i, :] = np.linalg.norm(X[i] - self.X_train, axis=1)
+        # (x + y) ** 2 = x ** 2 + y ** 2 - 2 * x * y
 
+        X_square_sum = np.sum(X ** 2, axis=1)
+        print(X_square_sum.shape)
+        X_train_square_sum = np.sum(self.X_train ** 2, axis=1)
+        print(X_train_square_sum.shape)
+        X_mul_X_train = np.dot(X, self.X_train.T)
+        print(X_mul_X_train.shape)
+        dists = np.sqrt(X_square_sum[:, np.newaxis] + X_train_square_sum - 2 * X_mul_X_train)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
